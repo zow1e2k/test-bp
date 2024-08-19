@@ -19,8 +19,6 @@ class CustomUser(AbstractUser):
 		'password'
 	)
 
-	#products = models.ManyToManyField(Product)
-
 	class Meta:
 		verbose_name = 'Пользователь'
 		verbose_name_plural = 'Пользователи'
@@ -30,6 +28,7 @@ class CustomUser(AbstractUser):
 		return self.get_full_name()
 
 
+'''
 class Balance(models.Model):
 	"""Модель баланса пользователя."""
 
@@ -39,6 +38,7 @@ class Balance(models.Model):
 		verbose_name = 'Баланс'
 		verbose_name_plural = 'Балансы'
 		ordering = ('-id',)
+'''
 
 
 class Subscription(models.Model):

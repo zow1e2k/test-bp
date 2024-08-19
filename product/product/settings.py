@@ -40,11 +40,17 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'djoser',
-    'api.apps.ApiConfig',
+    #'api.apps.ApiConfig',
     'courses.apps.CoursesConfig',
-    'users.apps.UsersConfig',
+    #'users.apps.UsersConfig',
+    'users',
+    'products',
     'drf_spectacular',
-    'products.apps.ProductsConfig'
+    'api',
+    'products.lessons',
+    'users.user_products',
+    #'products.apps.ProductsConfig',
+
 ]
 
 MIDDLEWARE = [
