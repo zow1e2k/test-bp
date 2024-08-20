@@ -10,6 +10,7 @@ from users.user_subscriptions.models import UserSubscription
 from api.pay.models import Transaction
 from users.user_balance.models import UserBalance
 import json
+from groups.models import MAX_COURSE_GROUPS, Group
 
 
 class ProductAPITests(APITestCase):
@@ -24,6 +25,13 @@ class ProductAPITests(APITestCase):
 		print(f"\nФамилия Имя клиента: {self.user}")
 		# print(self.user.is_active)
 		self.client = Client()
+
+		self.groups = []
+		for i in range(MAX_COURSE_GROUPS):
+			self.groups.append(Group.objects.create(
+				name=f"Группа №{i + 1}"
+			))
+			self.groups[i].save()
 
 		self.user_products = UserSubscription.objects.create(
 			user=self.user,
@@ -65,6 +73,7 @@ class ProductAPITests(APITestCase):
 				continue
 
 			self.user_products.products.add(product)
+
 
 	def test_available_products(self):
 		self.client = Client()
@@ -113,3 +122,6 @@ class ProductAPITests(APITestCase):
 
 		self.user_balance = UserBalance.objects.get(user=self.user)
 		print(f"Текущий баланс {self.user.username} = {self.user_balance.balance_value}")
+
+		self.user_group = CustomUser.objects.get(username=self.user.username).group
+		print(f"Текущая группа {self.user.username} = {self.user_group}")

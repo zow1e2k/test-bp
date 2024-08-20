@@ -4,6 +4,7 @@ MAX_COURSE_GROUPS: Final = 10
 
 
 class Group(models.Model):
+    name = models.CharField(max_length=64)
 
     class Meta:
         verbose_name = 'Группа'
