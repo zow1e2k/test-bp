@@ -8,6 +8,8 @@ from api.v1.views.user_view import UserViewSet
 
 from api.v1.views.product_view import AvailableProductsListView
 
+from api.v1.views.pay_view import pay
+
 v1_router = DefaultRouter()
 v1_router.register('users', UserViewSet, basename='users')
 v1_router.register('courses', CourseViewSet, basename='courses')
@@ -25,6 +27,7 @@ urlpatterns = [
     # Создание нового пользователя api/v1/auth/users/
     # Авторизация пользователя     api/v1/auth/token/login/
     path('available-products/', AvailableProductsListView.as_view(), name='available-products-list'),
+    path('pay/', pay, name='pay'),
 ]
 
 urlpatterns += [

@@ -8,6 +8,8 @@ from products.models import Product
 from products.lessons.models import Lesson
 from django.test import Client
 from users.user_products.models import UserProducts
+from api.pay.models import Transaction
+from users.user_balance.models import UserBalance
 
 
 class ProductAPITests(APITestCase):
@@ -25,6 +27,10 @@ class ProductAPITests(APITestCase):
 
 		self.user_products = UserProducts.objects.create(
 			user=self.user,
+		)
+
+		self.user_balance = UserBalance.objects.create(
+			user=self.user
 		)
 
 		self.lessons = []
@@ -68,3 +74,25 @@ class ProductAPITests(APITestCase):
 		self.assertEqual(response.status_code, status.HTTP_200_OK)
 		self.assertIn('Тестовый продукт', str(response.content.decode('utf-8')))
 		print(str(response.content.decode('utf-8')))
+
+	def test_pay(self):
+		self.client = Client()
+		self.client.force_login(self.user)
+
+		currentProduct = self.products[0]
+
+		response = self.client.post(
+			reverse('pay'),
+			{'user_id': self.user.id, 'product_id': currentProduct.id}
+		)
+
+		self.assertEqual(response.status_code, 201)
+
+		transaction = Transaction.objects.get(user=self.user, product=currentProduct)
+		print(f"Транзакция прошла успешно: {transaction.user.username}, {transaction.product.name} [{transaction.product.id}], {transaction.transaction_value}")
+
+		self.user_products.products.add(currentProduct)
+
+		print(f"{self.user.username} имеет доступ к продуктам: ", end=": ")
+		for prod in self.user_products.products.all():
+			print(f"{prod.name}", end=", ")

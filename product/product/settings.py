@@ -50,7 +50,8 @@ INSTALLED_APPS = [
     'products.lessons',
     'users.user_products',
     'users.user_balance',
-    'api.tests'
+    'api.tests',
+    'api.pay',
     #'products.apps.ProductsConfig',
 
 ]
