@@ -6,6 +6,7 @@ from products.models import Product
 from api.v1.serializers.transaction_serializer import TransactionSerializer
 from users.models import CustomUser
 from users.user_balance.models import UserBalance
+from users.user_products.models import UserProducts
 
 @api_view(['POST'])
 def pay(request):
@@ -29,6 +30,17 @@ def pay(request):
 
     if user_balance.balance_value < product.price:
         return Response({'error': 'Недостаточно средств'}, status=status.HTTP_400_BAD_REQUEST)
+
+    user_products = UserProducts.objects.get(user=user)
+
+    for prod in user_products.products.all():
+        if prod.id == product.id:
+            return Response({'error': 'У Вас уже куплен данный продукт'}, status=status.HTTP_400_BAD_REQUEST)
+
+    user_balance.balance_value -= product.price
+    user_balance.save()
+
+    user_products.products.add(product)
 
     transaction = Transaction.objects.create(
         product = product,

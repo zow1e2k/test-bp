@@ -79,7 +79,7 @@ class ProductAPITests(APITestCase):
 		self.client = Client()
 		self.client.force_login(self.user)
 
-		currentProduct = self.products[0]
+		currentProduct = self.products[1]
 
 		response = self.client.post(
 			reverse('pay'),
@@ -91,8 +91,11 @@ class ProductAPITests(APITestCase):
 		transaction = Transaction.objects.get(user=self.user, product=currentProduct)
 		print(f"Транзакция прошла успешно: {transaction.user.username}, {transaction.product.name} [{transaction.product.id}], {transaction.transaction_value}")
 
-		self.user_products.products.add(currentProduct)
-
 		print(f"{self.user.username} имеет доступ к продуктам: ", end=": ")
 		for prod in self.user_products.products.all():
 			print(f"{prod.name}", end=", ")
+		else:
+			print(" ")
+
+		self.user_balance = UserBalance.objects.get(user=self.user)
+		print(f"Текущий баланс {self.user.username} = {self.user_balance.balance_value}")
