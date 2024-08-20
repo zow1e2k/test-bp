@@ -10,24 +10,20 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('lessons', '0001_initial'),
+        ('products', '0001_initial'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Product',
+            name='UserProducts',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=64)),
-                ('date_created', models.DateTimeField()),
-                ('price', models.IntegerField()),
-                ('creator', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to=settings.AUTH_USER_MODEL)),
-                ('lesson', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='lessons.lesson')),
+                ('products', models.ManyToManyField(to='products.product')),
+                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
             options={
-                'verbose_name': 'Продукт',
-                'verbose_name_plural': 'Продукты',
+                'verbose_name': 'Продукты пользователя',
                 'ordering': ('-id',),
             },
         ),
