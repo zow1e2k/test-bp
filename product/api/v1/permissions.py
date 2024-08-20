@@ -1,5 +1,5 @@
 from rest_framework.permissions import BasePermission, SAFE_METHODS
-from users.models import Subscription
+from users.user_subscriptions.models import UserSubscription
 
 
 def make_payment(request):

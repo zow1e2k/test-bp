@@ -23,7 +23,7 @@ class UserBalance(models.Model):
 	@value.setter
 	def value(self, new_value):
 		if new_value < 0:
-			raise ValueError("[UserProducts] def value(self, new_value): new_value имеет отрицательное значение.")
+			raise ValueError("[UserSubscription] def value(self, new_value): new_value имеет отрицательное значение.")
 		self.balance_value = new_value
 
 def create_user_balance(user: CustomUser):

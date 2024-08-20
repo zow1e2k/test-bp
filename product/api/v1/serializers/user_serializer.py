@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from djoser.serializers import UserSerializer
 from rest_framework import serializers
 
-from users.models import Subscription
+from users.user_subscriptions.models import UserSubscription
 
 User = get_user_model()
 
@@ -29,7 +29,7 @@ class SubscriptionSerializer(serializers.ModelSerializer):
     # TODO
 
     class Meta:
-        model = Subscription
+        model = UserSubscription
         fields = (
             # TODO
         )

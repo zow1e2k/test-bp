@@ -3,7 +3,7 @@ from users.models import CustomUser
 from products.models import Product
 
 
-class UserProducts(models.Model):
+class UserSubscription(models.Model):
 	user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
 	products = models.ManyToManyField(Product)
 

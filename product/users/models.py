@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AbstractUser
+from groups.models import Group
 from django.db import models
 
 
@@ -18,6 +19,8 @@ class CustomUser(AbstractUser):
 		'password'
 	)
 
+	group = models.ForeignKey(Group, null=True, on_delete=models.SET_NULL)
+
 	class Meta:
 		verbose_name = 'Пользователь'
 		verbose_name_plural = 'Пользователи'
@@ -25,27 +28,3 @@ class CustomUser(AbstractUser):
 
 	def __str__(self):
 		return self.get_full_name()
-
-
-'''
-class Balance(models.Model):
-	"""Модель баланса пользователя."""
-
-	# TODO
-
-	class Meta:
-		verbose_name = 'Баланс'
-		verbose_name_plural = 'Балансы'
-		ordering = ('-id',)
-'''
-
-
-class Subscription(models.Model):
-	"""Модель подписки пользователя на курс."""
-
-	# TODO
-
-	class Meta:
-		verbose_name = 'Подписка'
-		verbose_name_plural = 'Подписки'
-		ordering = ('-id',)

@@ -1,9 +1,9 @@
 from django.apps import AppConfig
 
 
-class CoursesConfig(AppConfig):
+class GroupsConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'courses'
+    name = 'groups'
 
     def ready(self):
-        import courses.signals
+        import groups.signals

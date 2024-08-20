@@ -2,8 +2,10 @@ from django.contrib.auth import get_user_model
 from django.db.models import Avg, Count
 from rest_framework import serializers
 
-from courses.models import Course, Group, Lesson
-from users.models import Subscription
+from groups.models import Group
+from products.lessons.models import Lesson
+from products.models import Product
+#from users.user_subscriptions.models import UserSubscription
 
 User = get_user_model()
 
@@ -102,7 +104,7 @@ class CourseSerializer(serializers.ModelSerializer):
         # TODO Доп. задание
 
     class Meta:
-        model = Course
+        model = Product
         fields = (
             'id',
             'author',
@@ -121,4 +123,4 @@ class CreateCourseSerializer(serializers.ModelSerializer):
     """Создание курсов."""
 
     class Meta:
-        model = Course
+        model = Product

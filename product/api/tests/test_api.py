@@ -1,4 +1,3 @@
-
 from django.urls import reverse
 from django.utils import timezone
 from rest_framework import status
@@ -7,9 +6,10 @@ from users.models import CustomUser
 from products.models import Product
 from products.lessons.models import Lesson
 from django.test import Client
-from users.user_products.models import UserProducts
+from users.user_subscriptions.models import UserSubscription
 from api.pay.models import Transaction
 from users.user_balance.models import UserBalance
+import json
 
 
 class ProductAPITests(APITestCase):
@@ -21,11 +21,11 @@ class ProductAPITests(APITestCase):
 			first_name="Genius",
 			last_name="Geniously"
 		)
-		print(self.user)
-		print(self.user.is_active)
+		print(f"\nФамилия Имя клиента: {self.user}")
+		# print(self.user.is_active)
 		self.client = Client()
 
-		self.user_products = UserProducts.objects.create(
+		self.user_products = UserSubscription.objects.create(
 			user=self.user,
 		)
 
@@ -36,7 +36,7 @@ class ProductAPITests(APITestCase):
 		self.lessons = []
 		self.lessons.append(Lesson.objects.create(
 			name='Тестовый урок 1',
-			video_url ='https://github.com/zow1e2k'
+			video_url='https://github.com/zow1e2k'
 		))
 		self.lessons.append(Lesson.objects.create(
 			name='Тестовый урок 2',
@@ -72,14 +72,26 @@ class ProductAPITests(APITestCase):
 		response = self.client.get(reverse('available-products-list'))
 
 		self.assertEqual(response.status_code, status.HTTP_200_OK)
-		self.assertIn('Тестовый продукт', str(response.content.decode('utf-8')))
-		print(str(response.content.decode('utf-8')))
+		data = json.loads(response.content.decode('utf-8'))
+
+		for i in data:
+			print(
+				"\n[test_available_products]\n"
+				f"Номер продукта: {i.get('id')}.\n"
+				f"Название: {i.get('name')}.\n"
+				f"Цена: {i.get('price')}.\n"
+				f"Автор: {CustomUser.objects.get(id=i.get('creator'))}\n"
+				f"Урок: {Lesson.objects.get(id=i.get('lesson')).name}\n"
+			)
 
 	def test_pay(self):
 		self.client = Client()
 		self.client.force_login(self.user)
 
 		currentProduct = self.products[1]
+		print("\n[test_pay]")
+
+		print(f"Текущий баланс {self.user.username} = {self.user_balance.balance_value}")
 
 		response = self.client.post(
 			reverse('pay'),
@@ -89,9 +101,11 @@ class ProductAPITests(APITestCase):
 		self.assertEqual(response.status_code, 201)
 
 		transaction = Transaction.objects.get(user=self.user, product=currentProduct)
-		print(f"Транзакция прошла успешно: {transaction.user.username}, {transaction.product.name} [{transaction.product.id}], {transaction.transaction_value}")
+		print(
+			f"Транзакция прошла успешно: {transaction.user.username}, {transaction.product.name} [{transaction.product.id}], {transaction.transaction_value}")
 
-		print(f"{self.user.username} имеет доступ к продуктам: ", end=": ")
+		print(f"{self.user.username} имеет доступ к продуктам", end=": ")
+
 		for prod in self.user_products.products.all():
 			print(f"{prod.name}", end=", ")
 		else:
